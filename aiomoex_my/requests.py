@@ -23,6 +23,8 @@ __all__ = [
     "get_board_history",
     "get_board_history_all",
     "bond_cash_flows",
+    "get_coupons",
+    "get_amortizations",
 ]
 
 if sys.version_info >= (3, 7):
@@ -512,3 +514,38 @@ async def bond_cash_flows(
     # print('query ', query)
 
     return await _get_short_data(url, table, query)
+
+
+async def get_coupons(
+    security=None,
+    market="bonds",
+    engine="stock",
+):
+    """
+    Моя функция.
+    Подгружает данные по графику поступления купонов по облигации
+    """
+    url = (
+        f"https://iss.moex.com/iss/statistics/engines/{engine}/markets/{market}"
+        f"/bondization/{security}.json"
+    )
+    table = "coupons"
+    query = _make_query(table=table)
+    return await _get_long_data(url, table, query)
+
+async def get_amortizations(
+    security=None,
+    market="bonds",
+    engine="stock",
+):
+    """
+    Моя функция.
+    Подгружает данные по графику амортизации облигации
+    """
+    url = (
+        f"https://iss.moex.com/iss/statistics/engines/{engine}/markets/{market}"
+        f"/bondization/{security}.json"
+    )
+    table = "amortizations"
+    query = _make_query(table=table)
+    return await _get_long_data(url, table, query)

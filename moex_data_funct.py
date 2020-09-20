@@ -3,7 +3,7 @@ import asyncio
 # import aiomoex
 import pandas as pd
 
-MODULE_PATH = "P:/PP2/aiomoex_my/__init__.py"
+MODULE_PATH = "aiomoex_my/__init__.py"
 MODULE_NAME = "aiomoex_my"
 import importlib
 import sys
@@ -19,7 +19,7 @@ board="TQCB" #облигации T+
 engine="stock" # фондовый рынок
 market="bonds" #рынок облигаций
 columns=()#"SECID","ISIN","SHORTNAME","SECNAME","COUPONPERCENT","YIELDATPREVWAPRICE","EFFECTIVEYIELDWAPRICE","ZSPREADBP","GSPREADBP","DURATIONWAPRICE","OFFERDATE","MATDATE","FACEUNIT","LISTLEVEL") #колонки для вывода
-security='RU000A101483'
+# security='RU000A101483'
 
 
 # Посмотреть все доступные рынки - markets(бонды, рпс)
@@ -111,7 +111,7 @@ def get_board_history_all(engine=engine,market=market,board=board,date=None):
 	data=asyncio.get_event_loop().run_until_complete(main())
 	return data
 
-def bond_cash_flows(engine=engine,market=market,security=security):
+def bond_cash_flows(security,engine=engine,market=market):
 	async def main():
 		async with aiomoex.ISSClientSession():
 			data = await aiomoex.bond_cash_flows(engine=engine,market=market,security=security)
@@ -124,6 +124,26 @@ def bond_cash_flows(engine=engine,market=market,security=security):
 	return data
 
 
+def get_coupons(security,engine=engine,market=market,):
+	async def main():
+		async with aiomoex.ISSClientSession():
+			data = await aiomoex.get_coupons(engine=engine,market=market,security=security)
+			df = pd.DataFrame(data)
+
+		return df
+	data=asyncio.get_event_loop().run_until_complete(main())
+	return data
+
+def get_amortizations(security,engine=engine,market=market):
+	async def main():
+		async with aiomoex.ISSClientSession():
+			data = await aiomoex.get_amortizations(engine=engine,market=market,security=security)
+			df = pd.DataFrame(data)
+
+		return df
+	data=asyncio.get_event_loop().run_until_complete(main())
+	return data
+
 # RU000A1005Y9
 
 # Выгрузить данные по всем бумагам в выбранном режиме торгов на текущую дату в три эксель файла
@@ -131,4 +151,5 @@ def bond_cash_flows(engine=engine,market=market,security=security):
 
 
 # bonds.to_excel("RU000A1005Y9.xlsx")
+
 
